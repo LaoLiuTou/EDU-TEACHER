@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CHAT_TABLE</key>
+	<array>
+		<string>LOCAL_FILENAME</string>
+		<string>TITLE</string>
+		<string>MESSAGE_TYPE</string>
+		<string>ITEM_ID</string>
+		<string>FRIEND_ID</string>
+		<string>CHAT_TYPE</string>
+		<string>CONTENT_TYPE</string>
+		<string>CONTEXT</string>
+		<string>LAST_CONTEXT</string>
+		<string>ADD_TIME</string>
+		<string>SEND_STATUS</string>
+		<string>READ_STATUS</string>
+		<string>FLAG</string>
+		<string>MI</string>
+	</array>
+	<key>CHAT_USER</key>
+	<array>
+		<string>FRIEND_ID</string>
+		<string>FRIEND_NAME</string>
+		<string>FRIEND_IMAGE</string>
+		<string>FRIEND_DETAIL</string>
+		<string>ISONLINE</string>
+		<string>ISGROUP</string>
+		<string>UNREAD</string>
+		<string>LAST_TIME</string>
+		<string>LAST_CONTEXT</string>
+		<string>UPDATE_TIME</string>
+		<string>FLAG</string>
+	</array>
+</dict>
+</plist>
