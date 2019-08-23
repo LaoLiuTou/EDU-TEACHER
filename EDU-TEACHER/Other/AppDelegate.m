@@ -21,7 +21,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
    [NSThread sleepForTimeInterval:2.0];
-    int environ=3;  //1生产,2测试,3开发
+    int environ=2;  //1生产,2测试,3开发
     AppDelegate *jbad=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if(environ==1){
