@@ -13,6 +13,7 @@
 #import "GKCommon.h"
 #import "GKNavigationBarConfigure.h"
 #import "UINavigationController+GKCategory.h"
+#import "BaiduMobStat.h"
 @interface AppDelegate () 
 @end
 
@@ -21,7 +22,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
    [NSThread sleepForTimeInterval:2.0];
-    int environ=2;  //1生产,2测试,3开发
+    
+    //百度统计
+    [self startBaiduMobileStat];
+    
+    int environ=1;  //1生产,2测试,3开发
     AppDelegate *jbad=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if(environ==1){
@@ -51,7 +56,7 @@
     }
     jbad.ourVersion=@"3.1.1.0819_beta";
  
-    
+
     //是否在聊天界面
     _isChatPage=@1;
     [self replyPushNotificationAuthorization:application];
@@ -141,6 +146,15 @@
      
     return YES;
 }
+
+// 启动百度移动统计
+- (void)startBaiduMobileStat{
+    BaiduMobStat* statTracker = [BaiduMobStat defaultStat];
+    statTracker.enableDebugOn = YES;
+    
+    [statTracker startWithAppId:@"968f53d51c"]; // 设置您在mtj网站上添加的app的appkey,此处AppId即为应用的appKey
+}
+
 #pragma mark - 申请通知权限
 - (void)replyPushNotificationAuthorization:(UIApplication *)application{
     if (@available(iOS 10.0, *)) {

@@ -41,6 +41,8 @@
 }
 - (void)initView{
     
+    //NSArray *crash=@[@"1"];
+    //NSLog(@"%@",crash[2]);
     SettingView *settingView = [[SettingView alloc]init];
     self.settingView=settingView;
     self.settingView.frame = CGRectMake(0, kNavBarHeight, kWidth, kHeight-kNavBarHeight);
