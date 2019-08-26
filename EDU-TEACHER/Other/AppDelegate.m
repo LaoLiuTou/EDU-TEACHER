@@ -147,7 +147,7 @@
     return YES;
 }
 
-// 启动百度移动统计
+#pragma mark -启动百度移动统计
 - (void)startBaiduMobileStat{
     BaiduMobStat* statTracker = [BaiduMobStat defaultStat];
     statTracker.enableDebugOn = YES;
