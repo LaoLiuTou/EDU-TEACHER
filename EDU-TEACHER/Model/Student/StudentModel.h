@@ -35,7 +35,8 @@
 @property (nonatomic,strong) NSString <Optional> *ST_Z2;    //生源地
 @property (nonatomic,strong) NSString <Optional> *STATUS;        //状态：上课中；请假中；异动中(未签到)；异动中(未销假)；休息中~~~~
 @property (nonatomic,strong) NSDictionary <Optional> *STATUS_INFO;
-
+@property (nonatomic,strong) NSArray <Optional> *contcats;
+@property (nonatomic,strong) NSString <Optional> *NJ_D;    //年级
 //{                //状态信息：上课中：显示课程签到名称；请假中~~~~：显示请假类型+请假时间；异动中(未签到)：显示未签到课程签到名称；异动中(未销假)：显示请假类型+请假时间；休息中：显示休息中
 //    "id": 1461,
 //    "type": "病假",

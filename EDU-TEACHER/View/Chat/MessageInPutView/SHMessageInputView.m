@@ -508,7 +508,7 @@ static CGFloat start_maxy;
         picker.view.backgroundColor = [UIColor whiteColor];
         picker.delegate = self;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        
+        picker.modalPresentationStyle = UIModalPresentationFullScreen;
         [self.supVC presentViewController:picker animated:YES completion:nil];
     }
 }
@@ -532,6 +532,7 @@ static CGFloat start_maxy;
             [self sendMessageWithImage:content];
         }
     };
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
     [self.supVC presentViewController:vc animated:YES completion:nil];
 }
 

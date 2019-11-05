@@ -352,8 +352,7 @@
 - (void)listViewDidScrollCallback:(void (^)(UIScrollView * _Nonnull))callback {
     self.listScrollViewDidScroll = callback;
 }
-
-
+ 
 
 - (void)clickStatusBtn:(UIButton *)btn signin:(SignInModel *)signin {
     NSLog(@"signin:%@",signin);

@@ -99,16 +99,17 @@
         _statisticView.layer.cornerRadius = 4;
         _statisticView.layer.masksToBounds = YES;
         _statisticView.clipsToBounds = NO;
-        NSArray *statusArray=@[@"上课中",@"异动中",@"在假中",@"待销假"];
-        for(int i=0;i<4;i++){
+        NSArray *statusArray=@[@"上课中",@"异动中",@"在假中",@"待销假",@"待准假"];
+        
+        for(int i=0;i<5;i++){
             //线
-            if(i!=3){
+            if(i!=4){
                 UIView * line=[[UIView alloc] init];
                 line.backgroundColor=GKColorHEX(0xeeeeee, 1);
                 [_statisticView addSubview: line];
                 [line mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.top.equalTo(self.statisticView).offset(20);
-                    make.left.equalTo(self.statisticView).offset(((kWidth-marginWidth*2)/4) *(i+1));
+                    make.left.equalTo(self.statisticView).offset(((kWidth-marginWidth*2)/5) *(i+1));
                     make.width.mas_equalTo(1);
                     make.height.mas_equalTo(40);
                 }];
@@ -120,8 +121,8 @@
             [_statisticView addSubview: statisticBtn];
             [statisticBtn mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.statisticView).offset(0);
-                make.left.equalTo(self.statisticView).offset(((kWidth-marginWidth*2)/4) *(i));
-                make.width.mas_equalTo(((kWidth-marginWidth*2)/4));
+                make.left.equalTo(self.statisticView).offset(((kWidth-marginWidth*2)/5) *(i));
+                make.width.mas_equalTo(((kWidth-marginWidth*2)/5));
                 make.height.mas_equalTo(80);
             }];
             //状态
@@ -133,8 +134,8 @@
             [statisticBtn addSubview: statusLabel];
             [statusLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.statisticView).offset(50);
-                make.left.equalTo(self.statisticView).offset(((kWidth-marginWidth*2)/4) *i);
-                make.width.mas_equalTo((kWidth-marginWidth*2)/4);
+                make.left.equalTo(self.statisticView).offset(((kWidth-marginWidth*2)/5) *i);
+                make.width.mas_equalTo((kWidth-marginWidth*2)/5);
                 make.height.mas_equalTo(20);
             }];
             //数量
@@ -147,8 +148,8 @@
             [statisticBtn addSubview: numberLabel];
             [numberLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.statisticView).offset(10);
-                make.left.equalTo(self.statisticView).offset(((kWidth-marginWidth*2)/4) *i);
-                make.width.mas_equalTo((kWidth-marginWidth*2)/4);
+                make.left.equalTo(self.statisticView).offset(((kWidth-marginWidth*2)/5) *i);
+                make.width.mas_equalTo((kWidth-marginWidth*2)/5);
                 make.height.mas_equalTo(40);
             }];
         }

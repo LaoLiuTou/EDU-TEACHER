@@ -67,8 +67,13 @@
     else if(![reciveCode isEqual:registerModel.code]){
         [[LTAlertView new] showOneChooseAlertViewMessage:@"验证码不正确！"];
     }
-    else if([registerModel.password isEqualToString:@""]){
-        [[LTAlertView new] showOneChooseAlertViewMessage:@"请输入密码！"];
+    
+//    else if([registerModel.password isEqualToString:@""]){
+//        [[LTAlertView new] showOneChooseAlertViewMessage:@"请输入密码！"];
+//    }
+    
+    else if(![self checkPassword:registerModel.password]){
+        [[LTAlertView new] showOneChooseAlertViewMessage:@"密码必须为8-16位数字与字母组合！"];
     }
     else if(![registerModel.password isEqual: registerModel.repassword]){
         [[LTAlertView new] showOneChooseAlertViewMessage:@"两次输入密码不一致！"];
@@ -80,6 +85,14 @@
     }
     
 }
+-(BOOL)checkPassword:(NSString *) password
+{
+    NSString *pattern = @"^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{8,16}";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES%@",pattern];
+    BOOL isMatch = [pred evaluateWithObject:password];
+    return isMatch;
+}
+ 
 #pragma 验证码
 - (void)clickCodeBtn:(UIButton *)btn phone:(NSString *)phone {
     if([VerifyUtil isVaildMobileNo:phone]){

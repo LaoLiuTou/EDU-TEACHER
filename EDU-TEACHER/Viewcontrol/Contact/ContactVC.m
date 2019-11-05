@@ -22,6 +22,7 @@
 #import "SVProgressHUD.h"
 #import "SHChatMessageViewController.h"
 #import "StudentVC.h"
+#import "ScanRegisterVC.h"
 @interface ContactVC ()<UISearchBarDelegate,UITableViewDataSource, UITableViewDelegate,ContactDelegate>
 @property (nonatomic, strong) UITableView   *tableView;
 @property (nonatomic, strong) NSMutableArray   *listDataArray;
@@ -44,6 +45,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [self getNetworkData:@""];
+    [self getRegisterData];
 }
  
 #pragma mark - nav设置
@@ -55,9 +57,34 @@
     self.gk_navBackgroundColor=GKColorHEX(0x2c92f5, 1);
     self.gk_navTitle=@"通讯录";
     
+    self.gk_navRightBarButtonItem = [UIBarButtonItem itemWithTitle:nil image:[self reSizeImage:[UIImage imageNamed:@"tongxl-sq"] toSize:CGSizeMake(24, 24)] target:self action:@selector(rightBarClick)];
+       
 }
-
-
+- (UIImage *)reSizeImage:(UIImage *)image toSize:(CGSize)reSize
+{
+    
+    UIGraphicsBeginImageContextWithOptions(reSize, NO, [[UIScreen mainScreen] scale]);
+    // 绘制改变大小的图片
+    [image drawInRect:CGRectMake(0, 0, reSize.width, reSize.height)];
+    // 从当前context中创建一个改变大小后的图片
+    UIImage * scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+    // 使当前的context出堆栈
+    UIGraphicsEndImageContext();
+    // 返回新的改变大小后的图片
+    return scaledImage;
+    
+//    UIGraphicsBeginImageContext(CGSizeMake(reSize.width, reSize.height));
+//    [image drawInRect:CGRectMake(0, 0, reSize.width, reSize.height)];
+//    UIImage *reSizeImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//
+//    return [reSizeImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+}
+- (void)rightBarClick {
+    ScanRegisterVC *jumpVC=[[ScanRegisterVC alloc] init];
+    [self.navigationController pushViewController:jumpVC animated:YES];
+}
+ 
 #pragma mark - 添加搜索条
 - (LTSearchBar *)addSearchBar {
     //加上 搜索栏
@@ -389,11 +416,46 @@
     
     
 }
+
 - (void)clickHeader:(UITapGestureRecognizer *)tap model:(ContactModel *)model {
     NSLog(@"%@",model);
     StudentVC *studentVC= [StudentVC new];
     studentVC.studentId=model.id;
     [self.navigationController pushViewController:studentVC animated:YES];
 }
+#pragma mark - 是否有未审核的注册申请
+-(void)getRegisterData{
+    AppDelegate *jbad=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSMutableDictionary *paramDic =[NSMutableDictionary new];
+    [paramDic setObject:[jbad.userInfoDic objectForKey:@"USER_ID"] forKey:@"USER_ID"];
+    [paramDic setObject:@"" forKey:@"keyword"];
+    [paramDic setObject:@"1" forKey:@"page"];
+    NSString *postUrl=[NSString stringWithFormat:@"%@%@",jbad.url,@"queryStudentRegistList"];
+      
+    LTHTTPManager * manager = [LTHTTPManager manager];
+    [manager LTPost:postUrl param:paramDic success:^(NSURLSessionDataTask *task, id responseObject) {
+       
+        NSDictionary *resultDic=responseObject;
+        if([[resultDic objectForKey:@"Code"] isEqualToString:@"1"]){
+            NSArray *resultArray=[resultDic objectForKey:@"Result"];
+            if([resultArray count]>0){
+                
+                 self.gk_navRightBarButtonItem = [UIBarButtonItem itemWithTitle:nil image:[self reSizeImage:[UIImage imageNamed:@"tongxl-sqxx"] toSize:CGSizeMake(24, 24)] target:self action:@selector(rightBarClick)];
+            }
+            else{
+                self.gk_navRightBarButtonItem = [UIBarButtonItem itemWithTitle:nil image:[self reSizeImage:[UIImage imageNamed:@"tongxl-sq"] toSize:CGSizeMake(24, 24)] target:self action:@selector(rightBarClick)];
+            }
 
+        }
+        else{
+            
+        }
+       
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        
+        NSLog(@"请求失败----%@", error);
+       
+    }];
+    
+}
 @end

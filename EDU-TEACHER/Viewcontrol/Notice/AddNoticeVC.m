@@ -105,6 +105,7 @@
     } else {
         // Fallback on earlier versions
     }
+    documentPicker.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:documentPicker animated:YES completion:nil];
     
     
@@ -280,7 +281,13 @@
         if([[resultDic objectForKey:@"Code"] isEqualToString:@"1"]){
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:[resultDic objectForKey:@"Point"] preferredStyle:UIAlertControllerStyleAlert];
             [alertController addAction:([UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self.navigationController popViewControllerAnimated:YES];
+                //[self.navigationController popViewControllerAnimated:YES];
+                NSMutableArray *navViewArray = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+                int index = (int)[navViewArray indexOfObject:self];
+                [navViewArray removeObjectAtIndex:index];
+                [navViewArray removeObjectAtIndex:index-1];
+                [navViewArray addObject:[NoticeVC new]];
+                [self.navigationController setViewControllers:navViewArray animated:YES];
             }])];
             
             [self presentViewController:alertController animated:YES completion:nil];
@@ -332,6 +339,9 @@
     if([self.addNoticeView.nameText.text isEqualToString:@""]){
         [[LTAlertView new] showOneChooseAlertViewMessage:@"请输入通知名称！"];
     }
+    else if([self textLength:self.addNoticeView.nameText.text]>100){
+        [[LTAlertView new] showOneChooseAlertViewMessage:@"通知名称最多可输入50个汉字，100个字符！"];
+    }
     else if([xs_ids isEqualToString:@""]){
         [[LTAlertView new] showOneChooseAlertViewMessage:@"请选择签到范围！"];
     }
@@ -342,9 +352,12 @@
 
 #pragma mark - 保存
 - (void)clickSaveBtn:(UIButton *)btn {
-    NSLog(@"clickSaveBtn");
+    NSLog(@"clickSaveBtn：%lu",(unsigned long)[self textLength:self.addNoticeView.nameText.text]);
     if([self.addNoticeView.nameText.text isEqualToString:@""]){
         [[LTAlertView new] showOneChooseAlertViewMessage:@"请输入通知名称！"];
+    }
+    else if([self textLength:self.addNoticeView.nameText.text]>100){
+        [[LTAlertView new] showOneChooseAlertViewMessage:@"通知名称最多可输入50个汉字，100个字符！"];
     }
     else if([xs_ids isEqualToString:@""]){
         [[LTAlertView new] showOneChooseAlertViewMessage:@"请选择签到范围！"];
@@ -352,6 +365,18 @@
     else{
         [self addNotice:@"save"];
     }
+}
+#pragma mark - 字符长度
+- (NSUInteger)textLength:(NSString *)text{
+    
+    NSUInteger asciiLength = 0;
+    for (NSUInteger i = 0; i < text.length; i++) {
+        unichar uc = [text characterAtIndex: i];
+        asciiLength += isascii(uc) ? 1 : 2;
+    }
+    
+    NSUInteger unicodeLength = asciiLength;
+    return unicodeLength;
 }
 
 @end

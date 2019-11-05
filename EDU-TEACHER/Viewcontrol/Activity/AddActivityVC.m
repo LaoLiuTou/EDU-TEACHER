@@ -168,6 +168,7 @@
     } else {
         // Fallback on earlier versions
     }
+    documentPicker.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:documentPicker animated:YES completion:nil];
     
     

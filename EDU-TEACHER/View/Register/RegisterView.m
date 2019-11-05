@@ -19,6 +19,9 @@
 @property (nonatomic,strong)UIButton * codeBtn;
 @property (nonatomic,strong)UIButton * nextBtn;
 @property (nonatomic,strong)RegisterModel *registerModel;
+
+@property (nonatomic,strong)UIButton *seePassBtn;
+@property (nonatomic,strong)UIButton *seeRePassBtn;
 @end
 
 @implementation RegisterView
@@ -67,9 +70,26 @@
         hline.backgroundColor=GKColorHEX(0xeeeeee, 1);
         [_textFiledView addSubview: hline];
         
-        UIImageView *iconImageView=[[UIImageView alloc] initWithFrame:CGRectMake(15, 55*i+13, 29, 29)];
-        iconImageView.image = [UIImage imageNamed:[iconArray objectAtIndex:i]];
-        [_textFiledView addSubview: iconImageView];
+        if(i==3){
+            UIButton *seePassBtn=[[UIButton alloc] initWithFrame:CGRectMake(15, 55*i+13, 29, 29)];
+            _seePassBtn=seePassBtn;
+            [_seePassBtn setBackgroundImage:[UIImage imageNamed:@"mima"] forState:UIControlStateNormal];
+            [_seePassBtn addTarget:self action:@selector(clickSeePassBtn:) forControlEvents:UIControlEventTouchUpInside];
+            [_textFiledView addSubview: _seePassBtn];
+        }
+        else if(i==4){
+            UIButton *seeRePassBtn=[[UIButton alloc] initWithFrame:CGRectMake(15, 55*i+13, 29, 29)];
+            _seeRePassBtn=seeRePassBtn;
+            [_seeRePassBtn setBackgroundImage:[UIImage imageNamed:@"mima"] forState:UIControlStateNormal];
+            [_seeRePassBtn addTarget:self action:@selector(clickSeeRePassBtn:) forControlEvents:UIControlEventTouchUpInside];
+            [_textFiledView addSubview: _seeRePassBtn];
+        }
+        else{
+            UIImageView *iconImageView=[[UIImageView alloc] initWithFrame:CGRectMake(15, 55*i+13, 29, 29)];
+            iconImageView.image = [UIImage imageNamed:[iconArray objectAtIndex:i]];
+            [_textFiledView addSubview: iconImageView];
+        }
+        
         
         
     }
@@ -85,6 +105,41 @@
     [_textFiledView addSubview:self.codeBtn];
     [self addSubview:self.nextBtn];
     
+}
+-(void)clickSeePassBtn:(UIButton *)sender{
+    
+    NSString *tempPwdStr = _password.text;
+    _password.text = @""; // 这句代码可以防止切换的时候光标偏移
+    _password.secureTextEntry = NO;
+    _password.text = tempPwdStr;
+    [_seePassBtn setBackgroundImage:[UIImage imageNamed:@"mimaxianshi"] forState:UIControlStateNormal];
+    [_seePassBtn addTarget:self action:@selector(clickHidePassBtn:) forControlEvents:UIControlEventTouchUpInside];
+}
+-(void)clickHidePassBtn:(UIButton *)sender{
+    NSString *tempPwdStr = _password.text;
+    _password.text = @"";
+    _password.secureTextEntry = YES;
+    _password.text = tempPwdStr;
+    [_seePassBtn setBackgroundImage:[UIImage imageNamed:@"mima"] forState:UIControlStateNormal];
+    [_seePassBtn addTarget:self action:@selector(clickSeePassBtn:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+-(void)clickSeeRePassBtn:(UIButton *)sender{
+    
+    NSString *tempPwdStr = _repassword.text;
+    _repassword.text = @""; // 这句代码可以防止切换的时候光标偏移
+    _repassword.secureTextEntry = NO;
+    _repassword.text = tempPwdStr;
+    [_seeRePassBtn setBackgroundImage:[UIImage imageNamed:@"mimaxianshi"] forState:UIControlStateNormal];
+    [_seeRePassBtn addTarget:self action:@selector(clickHideRePassBtn:) forControlEvents:UIControlEventTouchUpInside];
+}
+-(void)clickHideRePassBtn:(UIButton *)sender{
+    NSString *tempPwdStr = _repassword.text;
+    _repassword.text = @"";
+    _repassword.secureTextEntry = YES;
+    _repassword.text = tempPwdStr;
+    [_seeRePassBtn setBackgroundImage:[UIImage imageNamed:@"mima"] forState:UIControlStateNormal];
+    [_seeRePassBtn addTarget:self action:@selector(clickSeeRePassBtn:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma mark - 懒加载
@@ -131,7 +186,7 @@
         _password.font=[UIFont systemFontOfSize:16];
         _password.textColor=[UIColor darkGrayColor];
         _password.frame=CGRectMake(70, 55*3+15, kWidth-30*2-80, 30);
-        _password.placeholder=@"密码";
+        _password.placeholder=@"密码为8-16位数字与字母组合";
     }
     return _password;
 }

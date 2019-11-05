@@ -191,13 +191,15 @@
     [_commentLabel setNumberOfLines:0];
     [_commentLabel sizeToFit];
     [commentback addSubview:_commentLabel];
+    
+     CGRect fram = [_commentLabel.attributedText boundingRectWithSize:CGSizeMake(kWidth-24, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
     [_commentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(commentTitleLabel.mas_bottom).offset(10);
         make.left.equalTo(commentback).offset(15);
         make.width.mas_equalTo(kWidth-30);
-        //make.height.mas_equalTo(contentHeight);
+        make.height.mas_equalTo(fram.size.height);
     }];
-    viewHeight+=_commentLabel.frame.size.height+55;
+    viewHeight+=fram.size.height+55;
     //图片
     UIImageView *imageView= [UIImageView new];
     [commentback addSubview:imageView];
@@ -215,10 +217,14 @@
         }
         else{
             make.height.mas_equalTo(200);
-            [imageView sd_setImageWithURL:[NSURL URLWithString:self.noticeModel.image]];
-            self->viewHeight+=200;
         }
     }];
+    if(self.noticeModel.image != nil&&![self.noticeModel.image isEqualToString:@""]){
+        [imageView sd_setImageWithURL:[NSURL URLWithString:self.noticeModel.image]];
+        self->viewHeight+=200;
+    }
+    
+    
     if([self.noticeModel.files count]>0){
         //附件
         UIImageView *fujianIcon=[[UIImageView alloc] init];
@@ -269,7 +275,7 @@
     return attribut;
     
 }
-
+ 
 //图片
 -(int) initFujianView{
     

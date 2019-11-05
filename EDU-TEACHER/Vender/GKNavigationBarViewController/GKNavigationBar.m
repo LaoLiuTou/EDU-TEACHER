@@ -63,15 +63,30 @@
     
     // 设置导航item偏移量
     if (GKDeviceVersion >= 11.0 && !GKConfigure.gk_disableFixSpace) {
-        self.layoutMargins = UIEdgeInsetsZero;
+        
         
         for (UIView *subview in self.subviews) {
             if ([NSStringFromClass(subview.class) containsString:@"ContentView"]) {
-                // 修复iOS11 之后的偏移
-                subview.layoutMargins = UIEdgeInsetsMake(0, self.gk_navItemLeftSpace, 0, self.gk_navItemRightSpace);
-                break;
+                if (GKDeviceVersion >= 13.0) {
+                    UIEdgeInsets margins = subview.layoutMargins;
+                    CGRect frame = subview.frame;
+                    frame.origin.x = -margins.left;
+                    //frame.origin.y = margins.top;
+                    frame.size.width += (margins.left + margins.right);
+                    //frame.size.height += (margins.top + margins.bottom);
+                    subview.frame = frame;
+                }
+                else{
+                    self.layoutMargins = UIEdgeInsetsZero;
+                    // 修复iOS11 之后的偏移
+                   subview.layoutMargins = UIEdgeInsetsMake(0, self.gk_navItemLeftSpace, 0, self.gk_navItemRightSpace);
+                   break;
+                }
+               
             }
         }
+        
+        
     }
 }
 

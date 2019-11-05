@@ -14,6 +14,7 @@
 #import "LTAlertView.h"
 #import "VerifyUtil.h"
 #import "SVProgressHUD.h"
+#import "LoginViewController.h"
 @interface Register2ViewController ()<Register2Delegate>
 @property (nonatomic,strong) Register2View *register2View;
 @end
@@ -152,7 +153,19 @@
         [SVProgressHUD dismiss];
         NSDictionary *resultDic=responseObject;
         if([[resultDic objectForKey:@"Code"] isEqualToString:@"1"]){
-            [[LTAlertView new] showOneChooseAlertViewMessage:@"审核将在3-7个工作日内完成，请耐心等待。加速审核请联系微信jlucat"];
+            //[[LTAlertView new] showOneChooseAlertViewMessage:@"审核将在3-7个工作日内完成，请耐心等待。加速审核请联系微信jlucat"];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"审核将在3-7个工作日内完成，请耐心等待。加速审核请联系微信jlucat" preferredStyle:UIAlertControllerStyleAlert];
+               [alertController addAction:([UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                   
+                   AppDelegate *jbad = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                   LoginViewController *jumpVC = [[LoginViewController alloc]init]; 
+                   jbad.window.rootViewController = jumpVC;
+                   
+               }])];
+               
+               [self presentViewController:alertController animated:YES completion:nil];
+            
+            
         }
         else{
             [[LTAlertView new] showOneChooseAlertViewMessage:[resultDic objectForKey:@"Point"]];

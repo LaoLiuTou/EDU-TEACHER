@@ -272,6 +272,7 @@ if(VAR == nil) return
                 
             }
         };
+        vc.modalPresentationStyle = UIModalPresentationFullScreen;
         [[self currentViewController] presentViewController:vc animated:YES completion:nil];
         
     }];
@@ -280,7 +281,7 @@ if(VAR == nil) return
         picker.view.backgroundColor = [UIColor whiteColor];
         picker.delegate = self;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        
+        picker.modalPresentationStyle = UIModalPresentationFullScreen;
         [[self currentViewController] presentViewController:picker animated:YES completion:nil];
     }];
     [alertController addAction:actionCancel];

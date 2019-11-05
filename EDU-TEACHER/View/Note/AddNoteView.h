@@ -12,6 +12,7 @@
 @protocol AddNoteDelegate <NSObject> 
 -(void)clickSelectStu;
 -(void)clickSaveBtn:(UIButton *)btn;
+-(void)clickSelectAtta;
 @end
 
 @interface AddNoteView : UIView
@@ -23,6 +24,11 @@
 @property (nonatomic,strong) UISegmentedControl *typeSegment ;
 @property (nonatomic,strong) UIImageView *selectImage;//学生
 @property (nonatomic,strong) UIScrollView *stuScrollView;//学生
+
+@property (nonatomic,strong) UILabel *filesLabel;//文件
+@property (nonatomic,strong) UIScrollView *filesScrollView;//文件
+@property (nonatomic,strong) UIImageView *attaImage;//文件
+
 @property (nonatomic, strong) UIButton *saveBtn;
 - (int)initView;
 @property(nonatomic,strong)id<AddNoteDelegate>delegate;

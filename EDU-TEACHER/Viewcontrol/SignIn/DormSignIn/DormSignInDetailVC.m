@@ -252,15 +252,15 @@
 }
 
 - (NSArray *)titles {
-    //if (!_titles) {
+    if (!_titles) {
         _titles = @[[NSString stringWithFormat:@"已签到 %@",self.model.sign_count],
                     [NSString stringWithFormat:@"未签到 %@",self.model.unsign_count]];
-    //}
+    }
     return _titles;
 }
 
 - (NSArray *)childVCs {
-    //if (!_childVCs) {
+    if (!_childVCs) {
         SignInStudentVC *listVC1 = [SignInStudentVC new];
         listVC1.signType=@"已签到";
         listVC1.type=@"宿舍签到";
@@ -272,11 +272,26 @@
         listVC2.type=@"宿舍签到";
         listVC2.detailId=self.detailId;
         _childVCs = @[listVC1, listVC2];
-    //}
+    }
     return _childVCs;
 }
 
-
+-(void)resetChildVCs{
+    _titles = @[[NSString stringWithFormat:@"已签到 %@",self.model.sign_count],
+    [NSString stringWithFormat:@"未签到 %@",self.model.unsign_count]];
+    
+    SignInStudentVC *listVC1 = [SignInStudentVC new];
+    listVC1.signType=@"已签到";
+    listVC1.type=@"课程签到";
+    listVC1.detailId=self.detailId;
+    listVC1.listDataArray=self.model.sign_list;
+    SignInStudentVC *listVC2 = [SignInStudentVC new];
+    listVC2.listDataArray=self.model.unsign_list;
+    listVC2.signType=@"未签到";
+    listVC2.type=@"课程签到";
+    listVC2.detailId=self.detailId;
+    _childVCs = @[listVC1, listVC2];
+}
 #pragma mark - 网络请求获取数据
 -(void)getNetworkData:(NSString *) refresh{
     [SVProgressHUD showWithStatus:@"加载中"];
@@ -297,10 +312,12 @@
             //[self.pageScrollView refreshHeaderView];
            
             if([refresh isEqualToString:@"1"]){
+                [self resetChildVCs];
                 [self.pageScrollView reloadData];
                 [self.pageVC reloadData];
+            }else{
+                [self initView];
             }
-            [self initView];
         }
         else{
             [[LTAlertView new] showOneChooseAlertViewMessage:[resultDic objectForKey:@"Point"]];

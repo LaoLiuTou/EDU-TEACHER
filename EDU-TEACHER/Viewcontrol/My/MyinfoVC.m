@@ -75,7 +75,7 @@
             UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
             imagePickerController.delegate = self;
             imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-            
+            imagePickerController.modalPresentationStyle = UIModalPresentationFullScreen;
             [self presentViewController:imagePickerController animated:YES completion:nil];
         }];
         [con addAction:camera];
@@ -84,6 +84,7 @@
         UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
         imagePickerController.delegate = self;
         imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        imagePickerController.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:imagePickerController animated:YES completion:nil];
     }];
     UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];

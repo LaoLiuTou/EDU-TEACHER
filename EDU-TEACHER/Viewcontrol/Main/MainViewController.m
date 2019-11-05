@@ -68,7 +68,7 @@
     AppDelegate *jbad=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     NSString *title=[NSString stringWithFormat:@"%@(%@)",[jbad.userInfoDic objectForKey:@"SC_NAME"],[jbad.userInfoDic objectForKey:@"AC_NAME"]];
     [mainData setObject:title forKey:@"title"];
-    [mainData setObject:@[@"0",@"0",@"0",@"0"] forKey:@"statistic"];
+    [mainData setObject:@[@"0",@"0",@"0",@"0",@"0"] forKey:@"statistic"];
     [mainData setObject:@"0" forKey:@"sign_did"];
     [mainData setObject:@"0" forKey:@"sign_undo"];
     [mainData setObject:@"0" forKey:@"leave_did"];
@@ -225,7 +225,14 @@
             [self.navigationController pushViewController:tempVC animated:YES];
             break;
         }
-            
+            case 10004:{
+                //jumpVC.status=@"待销假";
+                //[self.navigationController pushViewController:jumpVC animated:YES];
+                LeaveViewController *tempVC=[LeaveViewController new] ;
+                tempVC.selectIndex=0;
+                [self.navigationController pushViewController:tempVC animated:YES];
+                break;
+            }
         default:
             break;
     }
@@ -258,7 +265,7 @@
             NSString *title=[NSString stringWithFormat:@"%@(%@)",[userInfoDic objectForKey:@"SC_NAME"],[userInfoDic objectForKey:@"AC_NAME"]];
             NSMutableDictionary *mainData=[NSMutableDictionary new];
             [mainData setObject:title forKey:@"title"];
-            [mainData setObject:@[[resultDic objectForKey:@"inclassCount"],[resultDic objectForKey:@"unusualActionCount"],[resultDic objectForKey:@"onLeaveCount"],[resultDic objectForKey:@"pendingCount"]] forKey:@"statistic"];
+            [mainData setObject:@[[resultDic objectForKey:@"inclassCount"],[resultDic objectForKey:@"unusualActionCount"],[resultDic objectForKey:@"onLeaveCount"],[resultDic objectForKey:@"pendingCount"],[resultDic objectForKey:@"pendingApprovalCount"]] forKey:@"statistic"];
             [mainData setObject:[resultDic objectForKey:@"alreadylaunghCount"] forKey:@"sign_did"];
             [mainData setObject:[resultDic objectForKey:@"waitingLaunghCount"] forKey:@"sign_undo"];
             [mainData setObject:[resultDic objectForKey:@"alreadyLeaveCount"] forKey:@"leave_did"];

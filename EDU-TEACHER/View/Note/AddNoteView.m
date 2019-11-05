@@ -159,7 +159,80 @@
          make.height.mas_equalTo(24);
      }];
     
-    return 350;
+    
+    //添加附件
+        UIButton *attaback=[[UIButton alloc] init];
+        attaback.backgroundColor=[UIColor whiteColor];
+        [attaback addTarget:self action:@selector(clickSelectAtta) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:attaback];
+        [attaback mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(selectback.mas_bottom).offset(1);
+            make.width.mas_equalTo(kWidth);
+            make.height.mas_equalTo(50);
+        }];
+        UILabel *attaLabel=[[UILabel alloc] init];
+        attaLabel.text=@"添加文件";
+        attaLabel.font=[UIFont systemFontOfSize:14];
+        attaLabel.textColor=[UIColor blackColor];
+        attaLabel.textAlignment=NSTextAlignmentLeft;
+        [attaback addSubview:attaLabel];
+        [attaLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(attaback).offset(15);
+            make.centerY.equalTo(attaback);
+            make.width.mas_equalTo(100);
+            make.height.mas_equalTo(50);
+        }];
+    //    UILabel *filesLabel=[[UILabel alloc] init];
+    //    _filesLabel=filesLabel;
+    //    _filesLabel.font=[UIFont systemFontOfSize:14];
+    //    _filesLabel.textColor=[UIColor grayColor];
+    //    _filesLabel.textAlignment=NSTextAlignmentRight;
+    //    [attaback addSubview:_filesLabel];
+    //    [_filesLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    //        make.left.equalTo(attaback).offset(115);
+    //        make.centerY.equalTo(attaback);
+    //        make.width.mas_equalTo(kWidth-170);
+    //        make.height.mas_equalTo(50);
+    //    }];
+        //文件
+        UIScrollView *filesScrollView=[[UIScrollView alloc] init];
+        _filesScrollView=filesScrollView;
+        _filesScrollView.showsHorizontalScrollIndicator = NO;
+        _filesScrollView.backgroundColor=[UIColor whiteColor];
+        _filesScrollView.bounces = YES;
+        [attaback addSubview:_filesScrollView];
+        UITapGestureRecognizer *selectAtta= [[UITapGestureRecognizer alloc] initWithTarget:self  action:@selector(clickSelectAtta)];
+        [_filesScrollView addGestureRecognizer:selectAtta];
+        [_filesScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(attaback).offset(115);
+            make.centerY.equalTo(attaback);
+            make.width.mas_equalTo(kWidth-145);
+            make.height.mas_equalTo(50);
+        }];
+        
+        
+        UIImageView *attaImage=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fujian_gray"]];
+        _attaImage=attaImage;
+        [attaback addSubview:_attaImage];
+        [_attaImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(attaback).offset(-30);
+            make.centerY.equalTo(attaback);
+            make.width.mas_equalTo(20);
+            make.height.mas_equalTo(20);
+        }];
+        
+        
+        UIImageView *attaRightImage=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"youjiantou"]];
+        [attaback addSubview:attaRightImage];
+        [attaRightImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(attaback).offset(-10);
+            make.centerY.equalTo(attaback);
+            make.width.mas_equalTo(24);
+            make.height.mas_equalTo(24);
+        }];
+        
+    
+    return 400;
 }
 
 
@@ -175,7 +248,12 @@
         [self.delegate clickSaveBtn:sender];
     }
 }
-
+#pragma mark - 选择附件
+-(void)clickSelectAtta{
+    if([self.delegate respondsToSelector:@selector(clickSelectAtta)]){
+        [self.delegate clickSelectAtta];
+    }
+}
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {

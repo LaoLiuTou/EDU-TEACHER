@@ -11,16 +11,23 @@
 #import "AppDelegate.h"
 #import "LTAlertView.h"
 #import "SVProgressHUD.h"
+#import "AFNetworking.h"
 #import "AddNoteView.h"
 #import "NoteVC.h"
 #import "SelectStudentVC.h"
 #import "ScrollAddLabel.h"
-@interface AddNoteVC ()<AddNoteDelegate,UIScrollViewDelegate>
+@interface AddNoteVC ()<AddNoteDelegate,UIScrollViewDelegate,UIDocumentPickerDelegate,UIDocumentInteractionControllerDelegate>
 @property (nonatomic, strong) AddNoteView *addNoteView;
 @property (nonatomic, strong) UIButton *publishBtn;
 
 @property (nonatomic, strong) UIButton *saveBtn;
 @property (nonatomic, strong) UIScrollView *scrollView;
+
+
+@property (nonatomic, strong) NSMutableArray *attaFileNames;//附件名
+@property (nonatomic, strong) NSMutableArray *attaFileTypes;//附件类型
+@property (nonatomic, strong) NSMutableArray *attaFileData;//附件地址
+@property (nonatomic, strong) NSMutableArray *attaFileResult;//上传结果
 @end
 
 @implementation AddNoteVC{
@@ -36,7 +43,11 @@
     [super viewDidLoad];
     [self initNavBar];
     [self initView];
-    
+    //附件
+       _attaFileNames=[NSMutableArray new];
+       _attaFileTypes=[NSMutableArray new];
+       _attaFileData=[NSMutableArray new];
+       _attaFileResult=[NSMutableArray new]; 
     //选择学生
     xs_names=@"";
     xs_ids=@"";
@@ -156,6 +167,9 @@
         if(![xs_ids isEqualToString:@""]){
             [paramDic setObject:xs_ids forKey:@"xs_ids"];
         }
+        if([self.attaFileResult count]>0){
+                [paramDic setObject:[self.attaFileResult componentsJoinedByString:@","] forKey:@"files"];
+           }
         //[paramDic setObject:@[@"日常管理",@"谈心谈话"][self.addNoteView.typeSegment.selectedSegmentIndex] forKey:@"type"];
  
         NSString *postUrl=[NSString stringWithFormat:@"%@%@",jbad.url,@"addRizhi"];
@@ -240,6 +254,123 @@
     [[ScrollAddLabel new] addLabelToScrollView:self.addNoteView.stuScrollView labels:stuNameArray];
 }
 
+#pragma mark - 选择附件
+- (void)clickSelectAtta {
+    NSLog(@"clickSelectAttaBtn");
+    NSArray *types = @[@"com.microsoft.powerpoint.​ppt",
+                       @"com.microsoft.word.doc",
+                       @"com.microsoft.excel.xls",
+                       @"com.microsoft.powerpoint.​pptx",
+                       @"com.microsoft.word.docx",
+                       @"com.microsoft.excel.xlsx",
+                       @"public.avi",
+                       @"public.3gpp",
+                       @"public.mpeg-4",
+                       @"com.compuserve.gif",
+                       @"public.jpeg",
+                       @"public.png",
+                       @"public.plain-text",
+                       @"com.adobe.pdf"
+                       ]; // 可以选择的文件类型
+    UIDocumentPickerViewController *documentPicker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:types inMode:UIDocumentPickerModeOpen];
+    documentPicker.delegate = self;
+    documentPicker.modalPresentationStyle = UIModalPresentationFullScreen;
+    
+    if (@available(iOS 11.0, *)) {
+        [documentPicker setAllowsMultipleSelection:YES];
+    } else {
+        // Fallback on earlier versions
+    }
+    documentPicker.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:documentPicker animated:YES completion:nil];
+    
+    
+    
+}
+
+#pragma mark - UIDocumentPickerDelegate
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
+    for(NSURL *fileUrl in urls){
+        //获取授权
+        BOOL fileUrlAuthozied = [fileUrl startAccessingSecurityScopedResource];
+        if (fileUrlAuthozied) {
+            //通过文件协调工具来得到新的文件地址，以此得到文件保护功能
+            NSFileCoordinator *fileCoordinator = [[NSFileCoordinator alloc] init];
+            NSError *error;
+            
+            [fileCoordinator coordinateReadingItemAtURL:fileUrl options:0 error:&error byAccessor:^(NSURL *newURL) {
+                //读取文件
+                NSString *fileName = [newURL lastPathComponent];
+                NSError *error = nil;
+                NSData *fileData = [NSData dataWithContentsOfURL:newURL options:NSDataReadingMappedIfSafe error:&error];
+                if (error) {
+                    //读取出错
+                } else {
+                    
+                    [self.attaFileNames addObject:fileName];
+                    [self.attaFileData addObject:fileData];
+                }
+                
+                
+            }];
+            [fileUrl stopAccessingSecurityScopedResource];
+        } else {
+            //授权失败
+        }
+    }
+    [self dismissViewControllerAnimated:YES completion:NULL];
+    [self uploadFilesByDatas:self.attaFileData fileNames:self.attaFileNames fileTypes:self.attaFileTypes];
+}
+
+#pragma mark - 附件上传
+- (void)uploadFilesByDatas:(NSArray *) imageDatas fileNames:(NSArray *)filenames fileTypes:(NSArray *) fileTypes{
+    
+    AppDelegate *jbad=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    //NSData *imageData = UIImagePNGRepresentation(registerModel.idImage);
+    NSDictionary *paramDic = @{@"project":@"edu"};
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:jbad.urlUpload parameters:paramDic constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        for(int index=0;index<[imageDatas count];index++){
+            [formData appendPartWithFileData:imageDatas[index] name:@"files" fileName:filenames[index] mimeType:@""];
+        }
+    } error:nil];
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    NSURLSessionUploadTask *uploadTask;
+    uploadTask = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //显示进度
+            //[self.progress setProgress:uploadProgress.fractionCompleted];
+        });
+    }
+      completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+          if (error) {
+              [[LTAlertView new] showOneChooseAlertViewMessage:@"附件上传失败"];
+          } else {
+              NSDictionary *result=responseObject;
+              if([[result objectForKey:@"status"] isEqualToString:@"0"]){
+                  NSArray *tempArray=[result objectForKey:@"data"];
+                  if([tempArray count]>0){
+                      [self.addNoteView.attaImage setHidden:YES];
+                      self.attaFileResult=[tempArray mutableCopy];
+                      //self.addNoticeView.filesLabel.text=[filenames componentsJoinedByString:@","];
+                      [[ScrollAddLabel new] addLabelToScrollView:self.addNoteView.filesScrollView labels:filenames];
+ 
+ 
+                  }
+                  else{
+                      [[LTAlertView new] showOneChooseAlertViewMessage:@"附件上传失败"];
+                  }
+                  
+              }
+              else{
+                  [[LTAlertView new] showOneChooseAlertViewMessage:@"附件上传失败"];
+              }
+          }
+      }];
+    
+    [uploadTask resume];
+}
 #pragma mark - 保存
 - (void)clickSaveBtn:(UIButton *)btn {
     

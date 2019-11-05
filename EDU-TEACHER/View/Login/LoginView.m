@@ -87,8 +87,8 @@
     //忘记密码
     NSString * forgetString = @"忘记登录密码？找回密码";
     NSMutableAttributedString *tempStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",forgetString]];
-    [tempStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Arial-BoldItalicMT" size:14.0] range:NSMakeRange(0,7)];
-    [tempStr addAttribute:NSForegroundColorAttributeName value:[UIColor lightGrayColor]range:NSMakeRange(0,7)];
+    //[tempStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Arial-BoldItalicMT" size:14.0] range:NSMakeRange(0,7)];
+    [tempStr addAttribute:NSForegroundColorAttributeName value:[UIColor lightGrayColor] range:NSMakeRange(0,7)];
     UIButton *forgetPassBtn=[[UIButton alloc] initWithFrame:CGRectMake(0, 410, kWidth, 30)];
     _forgetPassBtn=forgetPassBtn;
     [_forgetPassBtn setAttributedTitle:tempStr forState:UIControlStateNormal];

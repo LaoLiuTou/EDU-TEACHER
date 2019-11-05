@@ -191,9 +191,8 @@ static LGSocketServe *socketServe = nil;
 
 - (void)logOutSocket
 {
-    NSString *filename = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"configInfo.plist"];
-    NSMutableDictionary *localConfigDic=[[[NSMutableDictionary alloc]initWithContentsOfFile:filename] mutableCopy];
-    NSDictionary *userInfoDic =[NSJSONSerialization JSONObjectWithData:[localConfigDic objectForKey:@"userInfo"] options:NSJSONReadingMutableLeaves error:nil];
+    AppDelegate *jbad=(AppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSDictionary *userInfoDic =jbad.userInfoDic;
     //offine message number
     NSMutableDictionary *socketParam=[[NSMutableDictionary alloc]init];
     [socketParam setObject:@"2" forKey:@"T"];
@@ -202,6 +201,7 @@ static LGSocketServe *socketServe = nil;
     NSString  *paramStr=[NSString stringWithFormat:@"%@\n",[ConverseTool DataTOjsonString:socketParam]];
     [socketServe sendMessage:paramStr];
     [self performSelector:@selector(cutOffSocket) withObject:nil afterDelay:1];
+    NSLog(@"%@--断开通信！",[userInfoDic objectForKey:@"USER_NAME"]);
 }
 
 

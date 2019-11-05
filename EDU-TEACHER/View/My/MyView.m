@@ -153,10 +153,10 @@
     [_menuView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.platFormRadiusView).offset(30);
         make.width.mas_equalTo(kWidth);
-        make.height.mas_equalTo(60*3);
+        make.height.mas_equalTo(60*4);
     }];
-    NSArray *iconArray=@[@"biaoqian",@"guanyu",@"shezhi"];
-    NSArray *titleArray=@[@"标签管理",@"设置",@"关于在校园"];
+    NSArray *iconArray=@[@"saomiao",@"biaoqian",@"guanyu",@"shezhi"];
+    NSArray *titleArray=@[@"我的二维码",@"标签管理",@"设置",@"关于在校园"];
     
     for(int i=0;i<titleArray.count;i++){
         UIButton *item=[[UIButton alloc] init];
@@ -199,15 +199,29 @@
             make.width.mas_equalTo(kWidth/2);
             make.height.mas_equalTo(60.0f);
         }];
-        //右箭头
-        UIImageView *arrImage=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"youjiantou"]];
-        [item addSubview:arrImage];
-        [arrImage mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(item);
-            make.right.mas_equalTo(-15);
-            make.width.mas_equalTo(20);
-            make.height.mas_equalTo(20);
-        }];
+        if(i==0){
+             
+            UIImageView *arrImage=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"saomiaoright"]];
+            [item addSubview:arrImage];
+            [arrImage mas_makeConstraints:^(MASConstraintMaker *make) {
+               make.centerY.equalTo(item);
+               make.right.mas_equalTo(-15);
+               make.width.mas_equalTo(20);
+               make.height.mas_equalTo(20);
+            }];
+        }
+        else{
+            //右箭头
+            UIImageView *arrImage=[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"youjiantou"]];
+            [item addSubview:arrImage];
+            [arrImage mas_makeConstraints:^(MASConstraintMaker *make) {
+               make.centerY.equalTo(item);
+               make.right.mas_equalTo(-15);
+               make.width.mas_equalTo(20);
+               make.height.mas_equalTo(20);
+            }];
+        }
+       
         
     }
     

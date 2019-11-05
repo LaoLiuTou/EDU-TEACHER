@@ -26,13 +26,14 @@
     //百度统计
     [self startBaiduMobileStat];
     
-    int environ=1;  //1生产,2测试,3开发
+    int environ=2;  //1生产,2测试,3开发
     AppDelegate *jbad=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     if(environ==1){
         //生产
         jbad.url=@"http://life.54atu.com/public/api.php/Api/";
         jbad.urlUpload=@"http://39.98.203.32:8088/FileUS/filesUpload";
+        jbad.schoolLiftUrl=@"http://life.54atu.com/schoollife/";
         jbad.statisUrl=[NSString stringWithFormat:@"%@signStatistics",jbad.url];
         jbad.socketIp=@"39.98.203.32";
         jbad.socketPort=@"8890";
@@ -41,6 +42,7 @@
         //测试
         jbad.url=@"http://test.jiubaisoft.com/jida_life/public/api.php/Api/";
         jbad.urlUpload=@"http://39.98.201.40:8090/FileUS/filesUpload";
+        jbad.schoolLiftUrl=@"http://39.98.202.100/SchoolLifeTest/";
         jbad.statisUrl=[NSString stringWithFormat:@"%@signStatistics",jbad.url];
         jbad.socketIp=@"39.98.201.40";
         jbad.socketPort=@"8891";
@@ -49,13 +51,15 @@
         //开发
         //jbad.url=@"http://192.168.1.169/life/public/api.php/Api/";
         jbad.url=@"http://dev.jiubaisoft.com/jida_life/public/api.php/Api/";
-        jbad.urlUpload=@"http://192.168.1.144/FileUS/filesUpload";
+        jbad.urlUpload=@"http://39.98.201.40:8090/FileUS/filesUpload";
+        jbad.schoolLiftUrl=@"http://39.98.202.100/SchoolLife/";
         jbad.statisUrl=[NSString stringWithFormat:@"%@signStatistics",jbad.url];
-        jbad.socketIp=@"192.168.1.144";
-        jbad.socketPort=@"8888";
+        jbad.socketIp=@"39.98.201.40";
+        jbad.socketPort=@"8891";
     }
-    jbad.ourVersion=@"3.1.1.0819_beta";
- 
+    jbad.ourVersion=@"3.2.2.0827";
+    
+     
 
     //是否在聊天界面
     _isChatPage=@1;
@@ -105,7 +109,7 @@
         self.window.rootViewController = [UINavigationController rootVC:[LTTabBarController new] translationScale:NO];
         [self.window makeKeyAndVisible];
         
-     
+        
     }
     else{
         //self.window=[[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -114,6 +118,8 @@
         self.window.backgroundColor = [UIColor whiteColor];
         self.window.rootViewController = [UINavigationController rootVC:[LoginViewController new] translationScale:NO];
         [self.window makeKeyAndVisible];
+        
+        application.applicationIconBadgeNumber = 0;
     }
     
     
@@ -150,7 +156,7 @@
 #pragma mark -启动百度移动统计
 - (void)startBaiduMobileStat{
     BaiduMobStat* statTracker = [BaiduMobStat defaultStat];
-    statTracker.enableDebugOn = YES;
+    //statTracker.enableDebugOn = YES;
     
     [statTracker startWithAppId:@"968f53d51c"]; // 设置您在mtj网站上添加的app的appkey,此处AppId即为应用的appKey
 }
@@ -238,14 +244,29 @@
 #pragma  mark - 获取device Token
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    NSLog(@"DeviceToken: {%@}",deviceToken.description);
+    
+    NSString *tokenStr=@"";
+    if (GKDeviceVersion >= 13.0) {
+        const unsigned *tokenBytes = [deviceToken bytes];
+        NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                              ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                              ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                              ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+        NSLog(@"deviceToken:%@", hexToken);
+        tokenStr=hexToken;
+    }
+    else{
+        tokenStr=deviceToken.description;
+         NSLog(@"DeviceToken: {%@}",deviceToken.description);
+    }
+   
     
     NSString *filename = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"configInfo.plist"];
     NSMutableDictionary *localConfigDic=[[[NSMutableDictionary alloc]initWithContentsOfFile:filename] mutableCopy];
     if([localConfigDic count]==0){
         localConfigDic=[[NSMutableDictionary alloc] init];
     } 
-    [localConfigDic setValue:[NSString stringWithFormat:@"%@",deviceToken] forKey:@"deviceToken"];
+    [localConfigDic setValue:tokenStr forKey:@"deviceToken"];
     [localConfigDic writeToFile:filename  atomically:YES];
     
 }

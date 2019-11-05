@@ -87,7 +87,13 @@
     [values addObject:myModel.ac_name==nil?@"":myModel.ac_name];
     [values addObject:myModel.role==nil?@"":myModel.role];
     [values addObject:myModel.phone==nil?@"":myModel.phone];
-    [values addObject:myModel.id_card==nil?@"":[NSString stringWithFormat:@"**************%@",myModel.id_card]];
+    if(myModel.id_card.length>4){
+        [values addObject:[NSString stringWithFormat:@"**************%@",[myModel.id_card substringFromIndex:myModel.id_card.length-4]]];
+    }
+    else{
+        [values addObject:myModel.id_card];
+    }
+    
     [values addObject:myModel.idcard_image==nil?@"":myModel.idcard_image];
     int y=112;
     for(int i=0;i<titles.count;i++){

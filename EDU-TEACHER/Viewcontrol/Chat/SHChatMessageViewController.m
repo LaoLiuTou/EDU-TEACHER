@@ -189,7 +189,11 @@
     AppDelegate *jbad=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     DataBaseHelper *dbh=[[DataBaseHelper alloc] init];
     NSString *chatDatabaseName=[NSString stringWithFormat:@"chat_%@",[jbad.userInfoDic objectForKey:@"ROW_ID"] ];
-    NSMutableArray *listDataArray =[dbh selectDataBase:chatDatabaseName tableName:@"CHAT_TABLE" columns:nil conditionColumns:@[@"FRIEND_ID"] values:@[self.model.FRIEND_ID] orderBy:@"ID" offset:(page-1)*pagesize limit:pagesize];
+    NSMutableArray *listDataArray = [NSMutableArray new];
+    if(self.model.FRIEND_ID!=nil){
+            listDataArray =[dbh selectDataBase:chatDatabaseName tableName:@"CHAT_TABLE" columns:nil conditionColumns:@[@"FRIEND_ID"] values:@[self.model.FRIEND_ID] orderBy:@"ID" offset:(page-1)*pagesize limit:pagesize];
+    }
+
     
     //保存未读的messageId
     NSMutableArray *messageIds=[[NSMutableArray alloc]init];

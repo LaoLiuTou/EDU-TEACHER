@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSArray <Optional> *xs_list; //相关学生列表
 @property (nonatomic,strong) NSString <Optional> *end_time;//完成时间
 @property (nonatomic,strong) NSString <Optional> *remind_time;//提醒时间
-
+@property (nonatomic,strong) NSArray <Optional> *file_list;
 - (instancetype)initWithDic:(NSDictionary *)dic;
 @end
 

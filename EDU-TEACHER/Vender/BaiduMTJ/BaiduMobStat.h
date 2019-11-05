@@ -413,8 +413,8 @@ UIViewInternalDefine
 /**
  百度移动统计UIWebView Category
  */
-@interface UIWebView (BaiduMobStatWebView)
-@end
+//@interface UIWebView (BaiduMobStatWebView)
+//@end
 
 /**
  百度移动统计NSInvocation Category

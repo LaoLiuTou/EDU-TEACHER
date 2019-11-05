@@ -11,7 +11,8 @@
 
 @interface NoteDetailView : UIView
 @property (nonatomic,strong) UILabel *nameLabel;//标题 
-@property (nonatomic,strong) UILabel *commentLabel;//内容 
+@property (nonatomic,strong) UILabel *commentLabel;//内容
+@property (nonatomic,strong) UIImageView *fujianIcon;
 @property (nonatomic,strong) NoteModel *noteModel; 
 -(int)initModel:(NoteModel *)noteModel type:(NSString *) noteType;
 @end

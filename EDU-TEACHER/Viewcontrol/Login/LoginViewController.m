@@ -35,15 +35,18 @@
     self.gk_navigationBar.hidden = YES;
 }
 -(void) initView{
-    self.view.backgroundColor = [UIColor whiteColor]; 
-    LoginView *loginView = [[LoginView alloc]init];
-    _loginView=loginView;
-    _loginView.frame = CGRectMake(0, 0, kWidth, kHeight);
-    _loginView.delegate = self;
-    [self.view addSubview:_loginView];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.loginView];
 }
 
-
+- (LoginView *)loginView{
+    if (!_loginView) {
+        _loginView = [[LoginView alloc]init];
+        _loginView.frame = CGRectMake(0, 0, kWidth, kHeight);
+        _loginView.delegate = self;
+    }
+    return _loginView;
+}
 #pragma mark - 登录
 -(void)clickLoginBtnName:(NSString *)username AndPass:(NSString *)password{
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];

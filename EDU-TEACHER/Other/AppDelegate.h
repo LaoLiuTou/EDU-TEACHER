@@ -22,6 +22,7 @@
 @property (nonatomic,strong) NSString *url;
 @property (nonatomic,strong) NSString *urlUpload;
 @property (nonatomic,strong) NSString *statisUrl;
+@property (nonatomic,strong) NSString *schoolLiftUrl;
 
 @property (nonatomic,strong) NSString *socketIp;
 @property (nonatomic,strong) NSString *socketPort;

@@ -24,6 +24,7 @@
 #import "StudentPunishVC.h"
 #import "StudentHonorVC.h"
 #import "StudentClassVC.h"
+#import <WebKit/WebKit.h>
 @interface StudentVC ()<UIScrollViewDelegate,StudentDelegate,MFMessageComposeViewControllerDelegate>
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic,retain) UIImageView *imageView;
@@ -315,7 +316,10 @@
 }
 - (void)clickTelBtn:(UIButton *)btn {
     NSLog(@"btn.tag:%ld",(long)btn.tag);
-    NSMutableString* str=[[NSMutableString alloc] initWithFormat:@"tel:%@",self.studentModel.PH_P];UIWebView * callWebview = [[UIWebView alloc] init];[callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];[self.view addSubview:callWebview];
+    NSMutableString* str=[[NSMutableString alloc] initWithFormat:@"tel:%@",self.studentModel.PH_P];
+    UIWebView * callWebview = [[UIWebView alloc] init];
+    [callWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:str]]];
+    [self.view addSubview:callWebview];
  
 }
 - (void)clickMessageBtn:(UIButton *)btn {
@@ -326,6 +330,7 @@
         //controller.navigationBar.tintColor = [UIColor redColor];
         controller.body = @""; //此处的body就是短信将要发生的内容
         controller.messageComposeDelegate = self;
+        controller.modalPresentationStyle=UIModalPresentationFullScreen;
         [self presentViewController:controller animated:YES completion:nil];
         [[[[controller viewControllers] lastObject] navigationItem] setTitle:[NSString stringWithFormat:@"发短信给%@",self.studentModel.PH_P]];//修改短信界面标题
     }
