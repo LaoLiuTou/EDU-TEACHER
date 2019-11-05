@@ -95,21 +95,22 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    [picker dismissViewControllerAnimated:YES completion:^{
-        
+    
+//    [picker dismissViewControllerAnimated:YES completion:^{
+//        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+//        CropImageController * con = [[CropImageController alloc] initWithImage:image delegate:self];
+//        [self.navigationController pushViewController:con animated:YES];
+//    }];
+    [picker dismissViewControllerAnimated:NO completion:^{
+            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+            CGFloat width = [UIScreen mainScreen].bounds.size.width;
+            CGFloat height = image.size.height * (width/image.size.width);
+            UIImage * orImage = [image resizeImageWithSize:CGSizeMake(width, height)];
+            CropImageController * con = [[CropImageController alloc] initWithImage:orImage delegate:self];
+            con.ovalClip = YES;
+            [self.navigationController pushViewController:con animated:YES];
     }];
-    [picker dismissViewControllerAnimated:YES completion:^{
-        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        CropImageController * con = [[CropImageController alloc] initWithImage:image delegate:self];
-        [self.navigationController pushViewController:con animated:YES];
-    }];
-    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    CGFloat height = image.size.height * (width/image.size.width);
-    UIImage * orImage = [image resizeImageWithSize:CGSizeMake(width, height)];
-    CropImageController * con = [[CropImageController alloc] initWithImage:orImage delegate:self];
-    con.ovalClip = YES;
-    [self.navigationController pushViewController:con animated:YES];
+    
 }
 #pragma mark -- CropImageDelegate
 - (void)cropImageDidFinishedWithImage:(UIImage *)image {
